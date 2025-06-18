@@ -1,8 +1,8 @@
-
 from flask import Flask, send_file, request
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from datetime import datetime
+import os  # ⬅️ važno za Render
 
 app = Flask(__name__)
 
@@ -26,6 +26,7 @@ def timer():
 
     img = Image.new("RGB", (450, 120), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
+
     try:
         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 50)
     except:
@@ -41,5 +42,7 @@ def timer():
     buf.seek(0)
     return send_file(buf, mimetype='image/png')
 
+# ✅ Port za lokalno i Render okruženje
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5050)
+    port = int(os.environ.get("PORT", 5000))  # koristi PORT iz Render okruženja
+    app.run(host='0.0.0.0', port=port)
